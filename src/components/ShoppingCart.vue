@@ -10,33 +10,24 @@
       </li>
     </ul>
     <h3>Total: {{ total | currency }}</h3>
-    <button @click="checkOutCart">Checkout</button>
+    <button @click="checkOut()">Checkout</button>
     <p v-if="checkoutStatus">{{ checkoutStatus }}</p>
   </div>
 </template>
 
 <script>
-import {mapState, mapGetters} from "vuex";
+import {mapState, mapGetters, mapActions} from "vuex";
 export default {
   computed: {
-    ...mapGetters({
+    ...mapGetters("cart",{
       products: "cartProducts",
       total: "cartTotal"
     }),
-    ...mapState({
-      checkoutStatus: state => state.cart.checkoutStatus
+    ...mapState("cart",{
+      checkoutStatus: state => state.checkoutStatus
     }),
-    products() {
-      return this.$store.getters.cartProducts;
-    },
-    total() {
-      return this.$store.getters.cartTotal;
-    }
   },
-  methods: {
-    checkOutCart() {
-      this.$store.dispatch("checkOut");
-    }
+  methods: {...mapActions("cart", ["checkOut"])
   }
 };
 </script>

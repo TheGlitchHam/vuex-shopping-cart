@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import {mapState, mapGetters} from "vuex";
+import {mapState, mapGetters, mapActions} from "vuex";
 export default {
   data() {
     return {
@@ -30,20 +30,21 @@ export default {
     ...mapState({
       products: state => state.products.products,
     }),
-    ...mapGetters({
+    ...mapGetters("products",{
       productIsInStock: "productIsInStock"
     }),
     },
 
   methods: {
-    addProductToCart(product) {
-      this.$store.dispatch("addProductToCart", product);
-    }
+    ...mapActions({
+      fetchProducts: "products/fetchProducts",
+      addProductToCart:"cart/addProductToCart"
+    })
   },
 
   created() {
     this.loading = true;
-    this.$store.dispatch("fetchProducts").then(() => (this.loading = false));
+    this.$store.dispatch("products/fetchProducts").then(() => (this.loading = false));
   }
 };
 </script>
