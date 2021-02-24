@@ -28,21 +28,12 @@ export default {
 
   computed: {
     ...mapState({
-      products: state => state.products,
+      products: state => state.products.products,
     }),
     ...mapGetters({
       productIsInStock: "productIsInStock"
     }),
     },
-
-  // computed: {
-  //   products() {
-  //     return this.$store.state.products;
-  //   },
-  //   productIsInStock(){
-  //     return this.$store.getters.productIsInStock
-  //   }
-  // },
 
   methods: {
     addProductToCart(product) {

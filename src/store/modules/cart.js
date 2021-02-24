@@ -1,3 +1,5 @@
+import shop from "@/api/shop";
+
 export default {
   state: {
     cart: [],
@@ -5,9 +7,9 @@ export default {
   },
 
   getters: {
-    cartProducts(state, getters) {
+    cartProducts(state, getters, rootState) {
       return state.cart.map(cartItem => {
-        const product = state.products.find(
+        const product = rootState.products.products.find(
           product => product.id === cartItem.id
         );
         return {
@@ -27,17 +29,15 @@ export default {
   },
 
   actions: {
-    addProductToCart(context, product) {
-      if (context.getters.productIsInStock(product)) {
-        const cartItem = context.state.cart.find(
-          item => item.id === product.id
-        );
+    addProductToCart({ state, getters, commit, rootState }, product) {
+      if (getters.productIsInStock(product)) {
+        const cartItem = state.cart.find(item => item.id === product.id);
         if (!cartItem) {
-          context.commit("pushProductToCart", product.id);
+          commit("pushProductToCart", product.id);
         } else {
-          context.commit("incrementItemQuantity", cartItem);
+          commit("incrementItemQuantity", cartItem);
         }
-        context.commit("decrementProductInventory", product);
+        commit("decrementProductInventory", product);
       }
     },
 
@@ -62,10 +62,6 @@ export default {
 
     incrementItemQuantity(state, cartItem) {
       cartItem.quantity++;
-    },
-
-    decrementProductInventory(state, product) {
-      product.inventory--;
     },
 
     setCheckoutStatus(state, status) {
