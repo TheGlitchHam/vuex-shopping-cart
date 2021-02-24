@@ -7,7 +7,11 @@
         {{ product.title }} - {{ product.price | currency }} -
         {{ product.inventory }}
 
-        <button @click="addProductToCart(product)">Add To Cart</button>
+        <button
+          :disable="!productIsInStock(product)"
+          @click="addProductToCart(product)">
+          Add To Cart
+        </button>
       </li>
     </ul>
   </div>
@@ -23,7 +27,10 @@ export default {
 
   computed: {
     products() {
-      return this.$store.getters.availableProducts;
+      return this.$store.state.products;
+    },
+    productIsInStock(){
+      return this.$store.getters.productIsInStock
     }
   },
 
